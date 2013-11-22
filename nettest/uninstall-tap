@@ -1,0 +1,8 @@
+#! /bin/bash
+while iptables -t nat -D POSTROUTING 1; do true; done
+sysctl net.ipv4.ip_forward=0
+pkill dhcpd
+pkill dnsmasq
+ip link set br0 down
+brctl delbr br0
+

@@ -1,0 +1,72 @@
+#! /bin/bash
+
+br_exists() {
+    ip link show br0 > /dev/null
+}
+
+br_has_ip() {
+    ip addr show dev br0 | grep 'inet\ ' > /dev/null
+}
+
+br_is_up() {
+    ip link show br0 | gawk -f isup.gawk
+}
+
+dnsmasq_running() {
+    pgrep dnsmasq > /dev/null
+}
+
+dhcpd_running() {
+    pgrep dhcpd > /dev/null
+}
+
+I4FORWARD="net.ipv4.ip_forward"
+forwarding() {
+    sysctl $I4FORWARD | grep 1 > /dev/null
+}
+
+IFACES="enp0s25 wlp3s0"
+nat_to_iface() {
+    iptables -t nat -S POSTROUTING | grep $1 > /dev/null
+}
+
+if ! br_exists; then
+    brctl addbr br0 tap0
+fi
+br_exists || exit 2
+
+if ! br_has_ip; then
+    ip addr add 10.93.48.1/24 dev br0
+fi
+br_has_ip || exit 3
+
+if ! br_is_up; then
+    ip link set br0 up
+fi
+br_is_up || exit 4
+
+if ! dnsmasq_running; then
+    dnsmasq -i br0 -2 br0
+fi
+dnsmasq_running || exit 5
+
+if ! dhcpd_running; then
+    dhcpd -q -cf dhcpd.conf br0
+fi
+dhcpd_running || exit 6
+
+if ! forwarding; then
+    sysctl $I4FORWARD=1
+fi
+forwarding || exit 7
+
+for iface in $IFACES; do
+    if ! nat_to_iface $iface; then
+        iptables -t nat -A POSTROUTING -o $iface -j MASQUERADE
+    fi
+    nat_to_iface $iface || exit 8
+done
+
+echo Everything is ready. You may now start \
+an unpriviledged QEMU instance using start-vm.
+
