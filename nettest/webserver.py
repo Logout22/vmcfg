@@ -3,7 +3,7 @@
 import http.server
 
 httpd = http.server.HTTPServer(
-    ("10.93.48.1", 8080),
+    ("10.93.48.1", 80),
     http.server.SimpleHTTPRequestHandler)
 
 #httpd.handle_request()
