@@ -1,0 +1,4 @@
+#! /bin/bash
+sshfs -o reconnect,sshfs_sync,idmap=user,transform_symlinks \
+    10.93.48.2: $HOME/sshfs/vm-nettest
+

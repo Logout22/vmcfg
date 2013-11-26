@@ -17,5 +17,5 @@ def iptohex(ip):
 if len(argv) > 2:
     iptohex(argv[1])
 else:
-    nrtoip(int(argv[1]))
+    nrtoip(int(argv[1], 0))
 
