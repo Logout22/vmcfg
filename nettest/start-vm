@@ -1,5 +1,6 @@
 #! /bin/bash
 
+cd `dirname $0`
 # With TAP
 if ! ip link show br0; then
     echo "Setup the bridge first, please."
