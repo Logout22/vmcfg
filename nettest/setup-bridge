@@ -1,8 +1,10 @@
 #! /bin/bash
-pkill dhclient
+dhclient -r -pf /run/dhclient.eth0.pid
 ip addr flush eth0
 ip tuntap add tun0 mode tap
 brctl addbr br0
 brctl addif br0 eth0 tun0
 ip link set tun0 up
-dhclient -v br0
+dhclient -v \
+-pf /run/dhclient.br0.pid \
+-lf /var/lib/dhcp/dhclient.br0.leases br0
