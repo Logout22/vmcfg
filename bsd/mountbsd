@@ -1,4 +1,8 @@
 #! /bin/bash
-sshfs -o reconnect,sshfs_sync,idmap=user,transform_symlinks \
-    root@10.93.48.32:/ $HOME/sshfs/vm-bsd
+# With TAP
+#sshfs -o reconnect,sshfs_sync,idmap=user,transform_symlinks \
+#    root@10.93.48.32:/ $HOME/sshfs/vm-bsd
 
+# With user
+sshfs -o reconnect,sshfs_sync,idmap=user,transform_symlinks,port=3963 \
+    root@localhost:/ $HOME/sshfs/vm-bsd

@@ -2,14 +2,14 @@
 
 cd `dirname $0`
 # With TAP
-if ! ip link show br0; then
-    echo "Setup the bridge first, please."
-    exit
-fi
-qemu-system-x86_64 -m 1024 -enable-kvm \
-    -net nic,macaddr="52:54:00:12:34:60",model=virtio \
-    -net bridge,br=br0 \
-    -drive file=nettest.img,if=virtio,media=disk,format=raw
+#if ! ip link show br0; then
+#    echo "Setup the bridge first, please."
+#    exit
+#fi
+#qemu-system-x86_64 -m 1024 -enable-kvm \
+#    -net nic,macaddr="52:54:00:12:34:60",model=virtio \
+#    -net bridge,br=br0 \
+#    -drive file=nettest.img,if=virtio,media=disk,format=raw
 #qemu-system-x86_64 -m 1024 -enable-kvm \
 #    -net nic \
 #    -net bridge,br=br0 \
@@ -19,9 +19,9 @@ qemu-system-x86_64 -m 1024 -enable-kvm \
 
 # With User
 # forwards an sshd to localhost:3962
-#qemu-system-x86_64 -m 1024 -enable-kvm \
-#    -net nic,model=virtio \
-#    -net user,hostname=nettest,hostfwd=tcp::3962-:22 \
-#    -net dump,file=nwtraffic.pcap \
-#    -drive file=nettest.img,if=virtio,media=disk,format=raw
+qemu-system-x86_64 -m 1024 -enable-kvm \
+    -net nic,model=virtio \
+    -net user,hostname=nettest,hostfwd=tcp::3962-:22 \
+    -net dump,file=nwtraffic.pcap \
+    -drive file=nettest.img,if=virtio,media=disk,format=raw
 
