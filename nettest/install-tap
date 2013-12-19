@@ -46,7 +46,7 @@ fi
 br_is_up || exit 4
 
 if ! dnsmasq_running; then
-    dnsmasq -i br0 -2 br0
+    dnsmasq -i br0 -2 br0 -C dnsmasq.conf
 fi
 dnsmasq_running || exit 5
 
